@@ -77,8 +77,7 @@ const ReactGiphySearchBox = ({
   const debouncedQuery = useDebounce(query, 500)
 
   const apiEndpoint = query ? 'search' : 'trending'
-  const apiUrl = offset =>
-    `https://api.giphy.com/v1/${library}/${apiEndpoint}?api_key=${apiKey}&limit=${gifPerPage}&rating=${rating}&offset=${offset}&q=${query}`
+  const apiUrl = offset => `/api/giphy?limit=${gifPerPage}&rating=${rating}&offset=${offset}&q=${query}`
 
   const [{ data, loading, error, lastPage }, fetchImages] = useApi()
 
