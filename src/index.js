@@ -1,7 +1,8 @@
 // @flow
 import React, { useEffect, useRef, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroller'
-import styles from './index.module.css'
+import { useStyle } from './style'
+import { styles } from './indexStyles'
 import SearchForm from './components/SearchForm/SearchForm'
 import ImageItem from './components/ImageItem/ImageItem'
 import PoweredByGiphy from './components/PoweredByGiphy/PoweredByGiphy'
@@ -12,8 +13,6 @@ import useSearchForm from './hooks/useSearchForm'
 import useDebounce from './hooks/useDebounce'
 import useMedia from './hooks/useMedia'
 import useApi from './hooks/useApi'
-import assetsSpinner from './assets/spinner.svg'
-import assetsPoweredByGiphy from './assets/poweredByGiphy.png'
 import {
   getComponentWrapperWidth,
   getDefaultMasonryConfig,
@@ -28,15 +27,20 @@ type MasonryConfig = {
   gutter: number,
 }
 
+export type ImageRenditionFileType = 'gif' | 'webp'
+
 type Props = {
   apiKey: string,
+  autoFocus: boolean,
   gifListHeight: string,
   gifPerPage: number,
   imageBackgroundColor: string,
+  imageRenditionFileType: ImageRenditionFileType,
+  imageRenditionName: string,
   library: 'gifs' | 'stickers',
   listItemClassName: string,
   listWrapperClassName: string,
-  loadingImage: string,
+  loadingImage: ?string,
   masonryConfig: Array<MasonryConfig>,
   messageError: string,
   messageLoading: string,
@@ -44,7 +48,7 @@ type Props = {
   onSearch: Function,
   onSelect: Function,
   poweredByGiphy: boolean,
-  poweredByGiphyImage: string,
+  poweredByGiphyImage: ?string,
   rating: string,
   searchFormClassName: string,
   searchPlaceholder: string,
@@ -53,9 +57,12 @@ type Props = {
 
 const ReactGiphySearchBox = ({
   apiKey,
+  autoFocus,
   gifListHeight,
   gifPerPage,
   imageBackgroundColor,
+  imageRenditionFileType,
+  imageRenditionName,
   library,
   listItemClassName,
   listWrapperClassName,
@@ -73,6 +80,7 @@ const ReactGiphySearchBox = ({
   searchPlaceholder,
   wrapperClassName,
 }: Props) => {
+  useStyle('Index', styles)
   const { query, handleInputChange, handleSubmit } = useSearchForm()
   const debouncedQuery = useDebounce(query, 500)
 
@@ -102,7 +110,7 @@ const ReactGiphySearchBox = ({
 
   return (
     <div
-      className={`${styles.componentWrapper}${
+      className={`reactGiphySearchbox-componentWrapper${
         wrapperClassName ? ` ${wrapperClassName}` : ''
       }`}
       style={{ width: getComponentWrapperWidth(masonryConfigMatchMedia) }}
@@ -114,10 +122,11 @@ const ReactGiphySearchBox = ({
         loadingData={loading}
         searchFormClassName={searchFormClassName}
         placeholder={searchPlaceholder}
+        autoFocus={autoFocus}
       />
 
       <div
-        className={`${styles.listWrapper}${
+        className={`reactGiphySearchbox-listWrapper${
           listWrapperClassName ? ` ${listWrapperClassName}` : ''
         }`}
         style={{ height: gifListHeight }}
@@ -159,6 +168,8 @@ const ReactGiphySearchBox = ({
                   listItemClassName={listItemClassName}
                   onSelect={onSelect}
                   backgroundColor={imageBackgroundColor}
+                  imageRenditionName={imageRenditionName}
+                  imageRenditionFileType={imageRenditionFileType}
                 />
               ))}
             </MasonryLayout>
@@ -171,24 +182,27 @@ const ReactGiphySearchBox = ({
 }
 
 ReactGiphySearchBox.defaultProps = {
+  autoFocus: false,
   gifListHeight: '300px',
   gifPerPage: 20,
   imageBackgroundColor: '#eee',
+  imageRenditionFileType: 'gif',
+  imageRenditionName: 'fixed_width_downsampled',
   library: 'gifs',
   listItemClassName: '',
   listWrapperClassName: '',
-  loadingImage: assetsSpinner,
+  loadingImage: undefined,
   masonryConfig: [{ columns: 2, imageWidth: 120, gutter: 5 }],
   messageError: 'Oops! Something went wrong. Please, try again.',
   messageLoading: 'Loading...',
   messageNoMatches: 'No matches found.',
   onSearch: () => {},
   poweredByGiphy: true,
-  poweredByGiphyImage: assetsPoweredByGiphy,
+  poweredByGiphyImage: undefined,
   rating: 'g',
   searchFormClassName: '',
-  wrapperClassName: '',
   searchPlaceholder: 'Search for GIFs',
+  wrapperClassName: '',
 }
 
 export default ReactGiphySearchBox

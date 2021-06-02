@@ -1,25 +1,33 @@
 // @flow
 import React from 'react'
-import styles from './Spinner.module.css'
+import { useStyle } from '../../style'
+import { styles } from './spinnerStyles'
+import SpinnerIcon from '../../assets/SpinnerIcon'
 
 type Props = {
   show: boolean,
   message: string,
-  image: string,
+  image: ?string,
 }
 
-const Spinner = ({ show, message, image }: Props) =>
-  show && (
-    <div role="status" className={styles.spinnerWrapper}>
-      <div
-        className={styles.spinner}
-        style={{ backgroundImage: `url(${image})` }}
-        data-testid="Spinner"
-      />
-      <div className={styles.spinnerText} data-testid="SpinnerText">
-        {message}
+const Spinner = ({ show, message, image }: Props) => {
+  useStyle('Spinner', styles)
+
+  return (
+    show && (
+      <div role="status" className="reactGiphySearchbox-spinnerWrapper">
+        <div className="reactGiphySearchbox-spinner" data-testid="Spinner">
+          {image ? <img src={image} alt="Loading icon" /> : <SpinnerIcon />}
+        </div>
+        <div
+          className="reactGiphySearchbox-spinnerText"
+          data-testid="SpinnerText"
+        >
+          {message}
+        </div>
       </div>
-    </div>
+    )
   )
+}
 
 export default Spinner

@@ -1,15 +1,25 @@
 // @flow
 import React from 'react'
-import styles from './PoweredByGiphy.module.css'
+import { useStyle } from '../../style'
+import { styles } from './poweredByGiphyStyles'
+import PoweredByGiphyLogo from '../../assets/PoweredByGiphyLogo'
 
 type Props = {
-  image: string,
+  image: ?string,
 }
 
-const PoweredByGiphy = ({ image }: Props) => (
-  <div className={styles.poweredByGiphy}>
-    <img src={image} alt="Powered by Giphy" data-testid="PoweredByGiphy" />
-  </div>
-)
+const PoweredByGiphy = ({ image }: Props) => {
+  useStyle('PoweredByGiphy', styles)
+
+  return (
+    <div className="reactGiphySearchbox-poweredByGiphy">
+      {image ? (
+        <img src={image} alt="Powered by Giphy" data-testid="PoweredByGiphy" />
+      ) : (
+        <PoweredByGiphyLogo />
+      )}
+    </div>
+  )
+}
 
 export default PoweredByGiphy

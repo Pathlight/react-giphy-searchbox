@@ -15,6 +15,8 @@ describe('ImageItem', () => {
       },
       title: 'Image title',
     },
+    imageRenditionName: 'fixed_width_downsampled',
+    imageRenditionFileType: 'gif',
     listItemClassName: '',
     onSelect,
     size: 200,
@@ -37,14 +39,14 @@ describe('ImageItem', () => {
     expect(image.getAttribute('src')).toBe(
       defaults.item.images.fixed_width_downsampled.url,
     )
-    expect(image.getAttribute('class')).toBe('image')
+    expect(image.getAttribute('class')).toBe('reactGiphySearchbox-image')
   })
 
   test('render the button', () => {
     const { getByTestId } = buildSubject()
     const button = getByTestId('ImageItemButton')
 
-    expect(button.getAttribute('class')).toBe('imageButton')
+    expect(button.getAttribute('class')).toBe('reactGiphySearchbox-imageButton')
     expect(button.getAttribute('type')).toBe('button')
     expect(button.getAttribute('style')).toBe(
       'background-color: rgb(238, 238, 238); width: 200px; height: 248px;',
@@ -72,7 +74,7 @@ describe('ImageItem', () => {
     const { getByTestId } = buildSubject(props)
 
     expect(getByTestId('ImageItemButton').getAttribute('class')).toBe(
-      'imageButton foo',
+      'reactGiphySearchbox-imageButton foo',
     )
   })
 })
